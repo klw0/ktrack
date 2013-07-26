@@ -1,0 +1,70 @@
+{% extends 'TrackerCommonBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+
+  <link href="{{ asset('bundles/trackersecurity/less/index.less') }}" rel="stylesheet/less" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+
+  <script src="{{ asset('bundles/trackercommon/js/jquery.tablesorter.min.js') }}"></script>
+  <script src="{{ asset('bundles/trackersecurity/js/index.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+  <form class="pull-left" id="known-ips-form">
+    <label for="known-ips-textarea">
+      <span class="icon-ok-circle"></span> Known IPs
+    </label>
+    <textarea name="known-ips-textarea" rows="5">{{ known_ips|join('\n') }}</textarea>
+  </form>
+
+  <form class="pull-right" id="blacklisted-ips-form">
+    <label for="blacklisted-ips-form">
+      <span class="icon-ban-circle"></span> Blacklisted IPs
+    </label>
+    <textarea name="blacklisted-ips-textarea" rows="5">{{ blacklisted_ips|join('\n') }}</textarea>
+  </form>
+
+  <table class="table table-bordered table-striped" id="login-table">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Username</th>
+        <th>Successful</th>
+        <th>IP</th>
+        <th>User Agent</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for login_attempt in login_attempts %}
+          <tr>
+            <td>{{ login_attempt.createdAt|date }}</td>
+            <td>{{ login_attempt.username }}</td>
+            <td>{{ login_attempt.successful ? 'Yes' : 'No' }}</td>
+            <td>
+              {% if login_attempt.ip in known_ips %}
+                <span class="label label-success">Known</span>
+              {% elseif login_attempt.ip in blacklisted_ips %}
+                <span class="label label-important">Blacklisted</span>
+              {% else %}
+                <span class="label label-warning">Unknown</span>
+              {% endif %}
+              {{ login_attempt.ip }}
+            </td>
+            <td class="user-agent-column">
+              {% set user_agent_max_length = 85 %}
+              {% if login_attempt.userAgent|length > user_agent_max_length %}
+                <a data-toggle="tooltip" class="long-user-agent" href="#" rel="tooltip" data-original-title="{{ login_attempt.userAgent }}">{{ login_attempt.userAgent|truncate(user_agent_max_length) }}</a>
+              {% else %}
+                {{ login_attempt.userAgent }}
+              {% endif %}
+            </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

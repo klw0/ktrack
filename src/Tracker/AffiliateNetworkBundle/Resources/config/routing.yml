@@ -1,0 +1,5 @@
+# Import routes from a controller directory
+affiliatenetwork:
+    resource: "@TrackerAffiliateNetworkBundle/Controller"
+    type:     annotation
+

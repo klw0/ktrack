@@ -1,0 +1,20 @@
+{% extends 'TrackerCommonBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+
+  <link href="{{ asset('bundles/trackercampaign/less/index.less') }}" rel="stylesheet/less" type="text/css" />
+{% endblock %}
+
+{% block content %}
+  <h3>Active Campaigns</h3>
+  {% include 'TrackerCampaignBundle:Campaign:index_campaign_table.html.twig' with {'campaigns': active_campaigns} %} 
+
+  <h3>Inactive Campaigns</h3>
+  {% include 'TrackerCampaignBundle:Campaign:index_campaign_table.html.twig' with {'campaigns': inactive_campaigns} %} 
+
+  <a class="btn btn-success" href="{{ path('campaign_new') }}">
+    <span class="icon-plus icon-white"></span>
+    New Campaign
+  </a>
+{% endblock %}

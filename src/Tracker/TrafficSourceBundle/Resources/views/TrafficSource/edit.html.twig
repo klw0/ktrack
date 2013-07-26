@@ -1,0 +1,22 @@
+{% extends 'TrackerCommonBundle::layout.html.twig' %}
+
+{% block javascripts %}
+  {{ parent() }}
+
+  <script src="{{ asset('bundles/trackertrafficsource/js/trafficsourceform.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="span8 offset2">
+      <form novalidate class="form-horizontal well" action="{{ path('trafficsource_update', { 'id': source.id }) }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+
+        <div class="form-actions">
+          <a class="btn" href="{{ path('trafficsource') }}">Cancel</a>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

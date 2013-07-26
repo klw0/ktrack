@@ -1,0 +1,88 @@
+{% extends 'TrackerCommonBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+
+  <link href="{{ asset('bundles/trackertarget/less/index.less') }}" rel="stylesheet/less" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+
+  <script src="{{ asset('bundles/trackercommon/js/jquery.tablesorter.min.js') }}"></script>
+  <script src="{{ asset('bundles/trackertarget/js/index.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+  <form novalidate class="form-inline" id="filter-form" action="{{ path('targets') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_errors(form) }}
+      {{ form_widget(form.campaigns) }}
+
+      <a id="update-btn" class="btn btn-success" href="{{ path('targets_update_campaign', {'campaignId': campaign.id}) }}">
+        <span class="icon-refresh icon-white"></span>
+        Update
+      </a>
+
+      <a class="btn btn-danger pull-right" data-toggle="modal" href="#reset-modal">
+        <span class="icon-remove-circle icon-white"></span>
+        Reset
+      </a>
+    {{ form_rest(form) }}
+  </form>
+
+  <hr />
+
+  <h3>
+    Targets
+    <span class="badge badge-success">{{ campaign.numberOfActiveTargets }} active</span>
+    <span class="badge badge-error">{{ campaign.numberOfInactiveTargets }} paused</span>
+    <span class="badge badge-inverse">{{ campaign.targets|length }} total</span>
+    <span class="badge">{{ campaign.creativeIdentifiers|length }} creatives</span>
+  </h3>
+  <table class="table table-bordered table-striped" id="targets">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Creative Identifier</th>
+        <th id="status-column">Status</th>
+        <th id="bid-column">Current Bid</th>
+        <th class="date-column">Created At</th>
+        <th class="date-column">Updated At</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for target in campaign.targets %}
+        <tr>
+          <td>{{ target.name }}</td>
+          <td>{{ target.creativeIdentifier }}</td>
+          <td>
+            {% if target.active %}
+              <span class="label label-success">Active</span>
+            {% else %}
+              <span class="label label-important">Paused</span>
+            {% endif %}
+          </td>
+          <td>{{ target.currentBid|money(4) }}</td>
+          {% set dateFormat = 'n/j/Y g:i A' %}
+          <td>{{ target.createdAt|date(dateFormat) }}</td>
+          <td>{{ target.updatedAt|date(dateFormat) }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div id="reset-modal" class="modal fade hide">
+    <div class="modal-header">
+      <a href="#" class="close" data-dismiss="modal">×</a>
+      <h3>Are you sure?</h3>
+    </div>
+    <div class="modal-body">
+      <p>This will delete all of the target data for this campaign.</p>
+    </div>
+    <div class="modal-footer">
+      <a href="{{ path('targets_delete_campaign', {'campaignId': campaign.id}) }}" class="btn btn-primary">Do It</a>
+      <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+    </div>
+  </div>
+
+{% endblock %}

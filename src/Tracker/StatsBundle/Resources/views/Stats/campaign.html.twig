@@ -1,0 +1,111 @@
+{% extends 'TrackerCommonBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+
+  <link href="{{ asset('bundles/trackerstats/less/campaign.less') }}" rel="stylesheet/less" type="text/css" />
+  {#<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/smoothness/jquery-ui.css" rel="stylesheet" />#}
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+
+  <script src="{{ asset('bundles/trackercommon/js/jquery.tablesorter.min.js') }}"></script>
+  <script src="{{ asset('bundles/trackercommon/js/jquery.hotkeys.js') }}"></script>
+  <script src="{{ asset('bundles/trackerstats/js/campaign.js') }}"></script>
+  {#<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/jquery-ui.min.js"></script>#}
+{% endblock %}
+
+{% block content %}
+  <form novalidate class="form-horizontal" id="filter-form" action="{{ path('stats_campaign_update') }}" method="post" {{ form_enctype(filter_form) }}>
+    {{ form_errors(filter_form) }}
+    {{ form_widget(filter_form.campaigns) }}
+
+    {# Extreme laziness #}
+    <span class="spacer"></span>
+
+    {{ form_widget(filter_form.startDate, {'attr': {'class': 'input-small'}}) }}
+    {{ form_widget(filter_form.startTime, {'attr': {'class': 'span1'}}) }}
+    to
+    {{ form_widget(filter_form.endDate, {'attr': {'class': 'input-small'}}) }}
+    {{ form_widget(filter_form.endTime, {'attr': {'class': 'span1'}}) }}
+
+    {# Extreme laziness #}
+    <span class="spacer"></span>
+
+    <div id="options-group">
+      <button id="options-button" class="btn">
+        <span class="icon-cog"></span>
+        Options
+        <span class="caret"></span>
+      </button>
+
+      <div id="options" class="hide">
+        {# Target Options #}
+        <fieldset>
+          <legend>Target Options</legend>
+          <div class="control-group">
+            <label class="control-label">Group by</label>
+            <div class="controls">
+              <label class="checkbox">
+                {{ form_widget(filter_form.targetGroupByLandingPage) }}
+                <span>Landing Page</span>
+              </label>
+              <label class="checkbox">
+                {{ form_widget(filter_form.targetGroupByOffer) }}
+                <span>Offer</span>
+              </label>
+              <label class="checkbox">
+                {{ form_widget(filter_form.targetGroupByExtraData1) }}
+                <span>Extra Data 1</span>
+              </label>
+              <label class="checkbox">
+                {{ form_widget(filter_form.targetGroupByExtraData2) }}
+                <span>Extra Data 2</span>
+              </label>
+              <label class="checkbox">
+                {{ form_widget(filter_form.targetGroupByExtraData3) }}
+                <span>Extra Data 3</span>
+              </label>
+              <label class="checkbox">
+                {{ form_widget(filter_form.targetGroupByExtraData4) }}
+                <span>Extra Data 4</span>
+              </label>
+              <label class="checkbox">
+                {{ form_widget(filter_form.targetGroupByExtraData5) }}
+                <span>Extra Data 5</span>
+              </label>
+            </div>
+          </div>
+        </fieldset>
+
+        {# Landing Page Options #}
+        <fieldset>
+          <legend>Landing Page Options</legend>
+          <div class="control-group">
+            <label class="control-label">Group by</label>
+            <div class="controls">
+              <label class="checkbox">
+                {{ form_widget(filter_form.landingPageGroupByOffer) }}
+                <span>Offer</span>
+              </label>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </div> <!-- end options group -->
+
+    <button id="reload-button" class="btn btn-success pull-right">
+      <span class="icon-refresh icon-white"></span>
+      Reload
+    </button>
+
+    {{ form_rest(filter_form) }}
+  </form>
+
+  <hr />
+
+  <div id="stats">
+    {% include 'TrackerStatsBundle:Stats:stats.html.twig' with {'target_stats': target_stats, 'landing_page_stats': landing_page_stats, 'offer_stats': offer_stats, 'campaign_stats': campaign_stats} only %}
+  </div>
+{% endblock %}

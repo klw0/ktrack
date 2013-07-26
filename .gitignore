@@ -1,0 +1,13 @@
+.DS_Store
+
+/web/bundles/
+/app/bootstrap*
+/app/cache/*
+/app/logs/*
+/vendor/
+/app/config/parameters.ini
+*~
+
+# Capify related
+Capfile
+/app/config/deploy.rb

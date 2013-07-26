@@ -1,0 +1,3 @@
+campaign:
+    resource: "@TrackerCampaignBundle/Controller"
+    type: annotation

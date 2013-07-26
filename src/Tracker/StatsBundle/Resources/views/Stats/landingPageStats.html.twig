@@ -1,0 +1,66 @@
+{% set has_offer = stats[0].offerName is defined %}
+
+<h3>Landing Page Stats</h3>
+
+<table class="table table-bordered table-striped" id="landing-page-stats">
+  <thead>
+    <tr>
+      <th>LP</th>
+
+      {% if has_offer %}
+        <th>Offer</th>
+      {% endif %}
+
+      <th>Views</th>
+      <th>Clicks</th>
+      <th>CTR</th>
+      <th>Conversions</th>
+      <th>CR</th>
+      <th>Revenue</th>
+      <th>Cost</th>
+      <th>P/L</th>
+      <th>ROI</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in stats %}
+      <tr>
+        {# LP #}
+        <td>{{ row.landingPageName }}</td>
+
+        {# Offer #}
+        {% if has_offer %}
+          <td>{{ row.offerName }}</td>
+        {% endif %}
+
+        {# Views #}
+        <td>{{ row.views }}</td>
+
+        {# Clicks #}
+        <td>{{ row.clicks }}</td>
+
+        {# CTR #}
+        <td>{{ (row.views != 0 ? row.clicks / row.views : 0)|percent }}</td>
+
+        {# Conversions #}
+        <td>{{ row.conversions }}</td>
+
+         {# CR #}
+        <td>{{ (row.views != 0 ? row.conversions / row.views : 0)|percent }}</td>
+
+        {# Revenue #}
+        <td>{{ row.revenue|default(0)|money }}</td>
+
+        {# Cost #}
+        <td>{{ row.cost|money(4) }}</td>
+
+        {# Profit #}
+        {% set profit = row.revenue - row.cost %}
+        <td>{{ profit|money }}</td>
+
+        {# ROI #}
+        <td>{{ (row.cost != 0 ? profit / row.cost : 0)|percent }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

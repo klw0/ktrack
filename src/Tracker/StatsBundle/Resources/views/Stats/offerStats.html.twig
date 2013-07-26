@@ -1,0 +1,50 @@
+<h3>Offer Stats</h3>
+
+<table class="table table-bordered table-striped" id="offer-stats">
+  <thead>
+    <tr>
+      <th>Offer</th>
+      <th>Visitors</th>
+      <th>Conversions</th>
+      <th>CR</th>
+      <th>Revenue</th>
+      <th>Cost</th>
+      <th>P/L</th>
+      <th>RPV</th>
+      <th>ROI</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in stats %}
+      <tr>
+        {# Offer #}
+        <td>{{ row.offerName }}</td>
+
+        {# Visitors #}
+        <td>{{ row.visitors }}</td>
+
+        {# Conversions #}
+        <td>{{ row.conversions }}</td>
+
+         {# CR #}
+        <td>{{ (row.visitors != 0 ? row.conversions / row.visitors : 0)|percent }}</td>
+
+        {# Revenue #}
+        <td>{{ row.revenue|default(0)|money }}</td>
+
+        {# Cost #}
+        <td>{{ row.cost|money(4) }}</td>
+
+        {# Profit #}
+        {% set profit = row.revenue - row.cost %}
+        <td>{{ profit|money }}</td>
+
+        {# RPV #}
+        <td>{{ (row.visitors != 0 ? row.revenue / row.visitors : 0)|money}}</td>
+
+        {# ROI #}
+        <td>{{ (row.cost != 0 ? profit / row.cost : 0)|percent }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -1,0 +1,46 @@
+{% extends 'TrackerCommonBundle::layout.html.twig' %}
+
+{% block content %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Target Parameter</th>
+        <th>Target Token</th>
+        <th>Can Get Target Data?</th>
+        <th>Website</th>
+        <th>Account Manager</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for source in sources %}
+      <tr>
+        <td>{{ source.name }}</td>
+        <td>{{ source.targetParameter }}</td>
+        <td>{{ source.targetToken }}</td>
+        <td>{{ source.hasService ? 'Yes' : 'No' }}</td>
+        <td>
+          <a href="{{ source.siteUrl }}" target="_blank">{{ source.siteUrl }}</a>
+        </td>
+        <td>{% include 'TrackerAccountManagerBundle:AccountManager:show.html.twig' with {'accountManager': source.accountManager} only %}</td>
+        <td>
+          <a class="btn btn-small" href="{{ path('trafficsource_edit', { 'id': source.id }) }}">
+            <span class="icon-pencil"></span>
+            Edit
+          </a>
+          <a class="btn btn-small btn-danger" href="{{ path('trafficsource_delete', { 'id': source.id }) }}">
+            <span class="icon-trash icon-white"></span>
+            Delete
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <a class="btn btn-success" href="{{ path('trafficsource_new') }}">
+    <span class="icon-plus icon-white"></span>
+    New Traffic Source
+  </a>
+{% endblock %}

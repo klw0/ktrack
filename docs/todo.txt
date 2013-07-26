@@ -1,0 +1,15 @@
+- Change Convs back to Conversions
+- Add Tablesorter to Dayparting
+- Add all time totals to Dayparting
+- Add a GT-like date selector/picker
+- Make negative numbers red in stats
+- Add profit/loss to revenue in nav bar
+- Hover (twipsy) description of LP, offer in stats page
+- Add a list of conversions
+- Move stat stuff with division by zero possible errors into a macro
+
+- Grep for all TODO's that are sprinkled around the codebase
+- Add referrer blanking when redirecting to offer as an option
+- Add cloaking
+- Campaign form client-side validation
+- Add spy for views/clicks/conversions (use Server-Sent Events)

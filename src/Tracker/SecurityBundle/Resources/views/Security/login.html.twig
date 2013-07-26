@@ -1,0 +1,36 @@
+{% extends 'TrackerCommonBundle::layout.html.twig' %}
+
+{# Don't display the header on the login page #}
+{% block header %}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="span5 offset3">
+      {% if error %}
+        <div class="alert alert-error">{{ error }}</div>
+      {% endif %}
+
+      <form class="form-horizontal well" action="{{ path("login_check") }}" method="post" id="login">
+
+        <div class="control-group">
+          {# If the name attribute for the username field changes, be sure to change it in LoginListener as well #}
+          <label class="control-label" for="username">Username</label>
+          <div class="controls">
+            <input type="text" id="username" name="_username" value="{{ last_username }}" />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" for="password">Password</label>
+          <div class="controls">
+            <input type="password" id="password" name="_password" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <input type="submit" class="btn btn-primary" value="Login" />
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

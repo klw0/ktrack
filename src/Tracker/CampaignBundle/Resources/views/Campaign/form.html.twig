@@ -1,0 +1,39 @@
+{% use "TrackerCampaignBundle:Campaign:form_blocks.html.twig" %}
+
+{{ form_errors(form) }}
+
+{{ form_row(form.name) }}
+{{ form_row(form.notes) }}
+{{ form_row(form.type) }}
+{{ form_row(form.trafficSource, {label: 'Traffic Source'}) }}
+{{ form_row(form.creativeIdentifiers, {label: 'Creative Identifiers'}) }}
+{{ form_row(form.estimatedCostPerView, {label: 'Estimated CPV'}) }}
+{{ form_row(form.active) }}
+
+<hr />
+
+<fieldset id="landing-page-collection-container">
+  <legend>Landing Pages</legend>
+  {% set landingPage = form.landingPages.get('prototype') %}
+  <div id="landing-page-collection" data-prototype="{{ block('landing_page_form') | e }}">
+    {% for landingPage in form.landingPages %}
+      {{ block('landing_page_form') }}
+    {% endfor %}
+
+    <button type="button" id="add-landing-page-button" class="btn">Add landing page</button>
+  </div>
+</fieldset>
+
+<fieldset id="offer-group-collection-container">
+  <legend>Offer Groups</legend>
+  {% set offerGroup = form.offerGroups.get('prototype') %}
+  <div id="offer-group-collection" data-prototype="{{ block('offer_group_form') | e }}">
+    {% for offerGroup in form.offerGroups %}
+      {{ block('offer_group_form') }}
+    {% endfor %}
+
+    <button type="button" id="add-offer-group-button" class="btn">Add offer group</button>
+  </div>
+</fieldset>
+
+{{ form_widget(form._token) }}

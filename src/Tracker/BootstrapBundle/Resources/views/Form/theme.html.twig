@@ -1,0 +1,71 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% block form_widget %}
+{% spaceless %}
+  {# If the form has a parent form, then wrap this form in a fieldset #}
+  {% if form.hasParent() %}
+    <div {{ block('widget_container_attributes') }}>
+      <fieldset>
+        <legend>{{ label }}</legend>
+        {{ block('field_rows') }}
+        {{ form_rest(form) }}
+      </fieldset>
+    </div>
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endspaceless %}
+{% endblock form_widget %}
+
+{% block field_errors %}
+{% spaceless %}
+  {% if errors|length > 0 %}
+    <span class="help-inline">
+    {% for error in errors %}
+      {{ error.messageTemplate|trans(error.messageParameters, 'validators') }}
+    {% endfor %}
+    </span>
+  {% endif %}
+{% endspaceless %}
+{% endblock field_errors %}
+
+{% block field_row %}
+{% spaceless %}
+  {% set is_type_form = 'form' in form.get('types') %}
+
+  {% if is_type_form and form.hasParent() %}
+    {{ form_widget(form) }}
+  {% else %}
+    <div class="control-group {% if errors|length > 0 %}error{% endif %}">
+      {{ form_label(form, label|default(null), {'attr':{'class': 'control-label'}}) }}
+
+      <div class="controls">
+        {{ form_widget(form) }}
+        {{ form_errors(form) }}
+      </div>
+    </div>
+  {% endif %}
+{% endspaceless %}
+{% endblock field_row %}
+
+
+{# Widgets #}
+
+{% block money_widget %}
+{% spaceless %}
+  <div class="input-prepend">
+    <span class="add-on">{{ money_pattern|replace({'{{ widget }}': ''}) }}</span>
+    {{ block('field_widget') }}
+  </div>
+{% endspaceless %}
+{% endblock money_widget %}
+
+{% block percent_widget %}
+{% spaceless %}
+  {% set type = type|default('text') %}
+  <div class="input-append">
+    {{ block('field_widget') }}
+    <span class="add-on">%</span>
+  </div>
+{% endspaceless %}
+{% endblock percent_widget %}

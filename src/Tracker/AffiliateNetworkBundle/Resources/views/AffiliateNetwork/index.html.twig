@@ -1,0 +1,42 @@
+{% extends 'TrackerCommonBundle::layout.html.twig' %}
+
+{% block content %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Short Name</th>
+        <th>Website</th>
+        <th>Account Manager</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for network in networks %}
+      <tr>
+        <td>{{ network.name }}</td>
+        <td>{{ network.shortName }}</td>
+        <td>
+          <a href="{{ network.siteUrl }}" target="_blank">{{ network.siteUrl }}</a>
+        </td>
+        <td>{% include 'TrackerAccountManagerBundle:AccountManager:show.html.twig' with {'accountManager': network.accountManager} only %}</td>
+        <td>
+          <a class="btn btn-small" href="{{ path('affiliatenetwork_edit', { 'id': network.id }) }}">
+            <span class="icon-pencil"></span>
+            Edit
+          </a>
+          <a class="btn btn-small btn-danger" href="{{ path('affiliatenetwork_delete', { 'id': network.id }) }}">
+            <span class="icon-trash icon-white"></span>
+            Delete
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a class="btn btn-success" href="{{ path('affiliatenetwork_new') }}">
+    <span class="icon-plus icon-white"></span>
+    New Affiliate Network
+  </a>
+{% endblock %}

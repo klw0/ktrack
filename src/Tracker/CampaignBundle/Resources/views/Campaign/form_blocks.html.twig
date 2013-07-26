@@ -1,0 +1,54 @@
+{# Landing Page #}
+{% block landing_page_form %}
+{% spaceless %}
+  <div class="landing-page">
+    {{ form_row(landingPage.name) }}
+    {{ form_row(landingPage.description) }}
+    {{ form_row(landingPage.url) }}
+    {{ form_row(landingPage.viewKeyParameter, {label: 'View Key Parameter'}) }}
+    {{ form_row(landingPage.wantsTarget, {label: 'Wants Target'}) }}
+    {{ form_row(landingPage.targetParameter, {label: 'Target Parameter'}) }}
+    {{ form_row(landingPage.weight) }}
+  </div>
+{% endspaceless %}
+{% endblock landing_page_form %}
+
+{# Offer Group #}
+{% block offer_group_form %}
+{% spaceless %}
+  <div class="offer-group">
+    {{ form_row(offerGroup.name) }}
+
+    <fieldset>
+      <legend>Offers</legend>
+      {% set offer = offerGroup.offers.get('prototype') %}
+      <div class="offer-collection" data-prototype="{{ block('offer_form') | e }}">
+        {% for offer in offerGroup.offers %}
+          {{ block('offer_form') }}
+        {% endfor %}
+
+        <button type="button" class="add-offer-button btn">Add offer</button>
+      </div>
+    </fieldset>
+
+  </div>
+{% endspaceless %}
+{% endblock offer_group_form %}
+
+{# Offer #}
+{% block offer_form %}
+{% spaceless %}
+  {% if offer is defined %}
+    <div class="offer">
+      {{ form_row(offer.name) }}
+      {{ form_row(offer.description) }}
+      {{ form_row(offer.url) }}
+      {{ form_row(offer.wantsSubId, {label: 'Wants Sub Id'}) }}
+      {{ form_row(offer.wantsQueryString, {label: 'Wants Query String'}) }}
+      {{ form_row(offer.payout) }}
+      {{ form_row(offer.affiliateNetwork, {label: 'Affiliate Network'}) }}
+      {{ form_row(offer.weight) }}
+    </div>
+  {% endif %}
+{% endspaceless %}
+{% endblock offer_form %}

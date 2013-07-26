@@ -1,0 +1,3 @@
+stats:
+    resource: "@TrackerStatsBundle/Controller"
+    type: annotation

@@ -1,0 +1,15 @@
+{% extends 'TrackerCommonBundle::layout.html.twig' %}
+
+{% block content %}
+  <div class="row">
+    <div class="span5 offset3">
+      <form novalidate class="form-horizontal well" action="{{ path('add_converting_subids') }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+
+        <div class="form-actions">
+          <input type="submit" class="btn btn-primary" />
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

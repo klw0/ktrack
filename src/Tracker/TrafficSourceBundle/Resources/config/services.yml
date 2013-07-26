@@ -1,0 +1,15 @@
+parameters:
+    trafficvance.class: Tracker\TrafficSourceBundle\Service\Trafficvance
+    leadimpact.class: Tracker\TrafficSourceBundle\Service\LeadImpact
+    mediatraffic.class: Tracker\TrafficSourceBundle\Service\MediaTraffic
+
+services:
+    trafficvance:
+        class: %trafficvance.class%
+        arguments: [@doctrine]
+    leadimpact:
+        class: %leadimpact.class%
+        arguments: [@doctrine]
+    mediatraffic:
+        class: %mediatraffic.class%
+        arguments: [@doctrine]

@@ -1,0 +1,119 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+  {{ site_name }}
+{% endblock %}
+
+{% block stylesheets %}
+  <link href="{{ asset('bundles/trackercommon/less/common.less') }}" rel="stylesheet/less" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+  <script src="{{ asset('bundles/trackercommon/js/less.min.js') }}"></script>
+  <script src="{{ asset('bundles/trackercommon/js/jquery.min.js') }}"></script>
+  <script src="{{ asset('bundles/trackerbootstrap/js/bootstrap-alert.js') }}"></script>
+  <script src="{{ asset('bundles/trackerbootstrap/js/bootstrap-button.js') }}"></script>
+  <script src="{{ asset('bundles/trackerbootstrap/js/bootstrap-carousel.js') }}"></script>
+  <script src="{{ asset('bundles/trackerbootstrap/js/bootstrap-collapse.js') }}"></script>
+  <script src="{{ asset('bundles/trackerbootstrap/js/bootstrap-dropdown.js') }}"></script>
+  <script src="{{ asset('bundles/trackerbootstrap/js/bootstrap-modal.js') }}"></script>
+  <script src="{{ asset('bundles/trackerbootstrap/js/bootstrap-tooltip.js') }}"></script>
+  <script src="{{ asset('bundles/trackerbootstrap/js/bootstrap-popover.js') }}"></script>
+  <script src="{{ asset('bundles/trackerbootstrap/js/bootstrap-scrollspy.js') }}"></script>
+  <script src="{{ asset('bundles/trackerbootstrap/js/bootstrap-tab.js') }}"></script>
+  <script src="{{ asset('bundles/trackerbootstrap/js/bootstrap-transition.js') }}"></script>
+  <script src="{{ asset('bundles/trackerbootstrap/js/bootstrap-typeahead.js') }}"></script>
+
+  <script src="{{ asset('bundles/trackercommon/js/layout.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+  {% block header %}
+    {# Nav items with one level of dropdown items #}
+    {% set nav_items = {
+      'Campaigns': {children: {
+        'Campaign List': {route: 'campaign'},
+        'New Campaign': {route: 'campaign_new'},
+      }},
+      'Stats': {children: {
+        'Campaign': {route: 'stats'},
+        'Dayparting': {route: 'stats_daypart'},
+        'Horizontal Divider 1': {divider: true},
+        'Add Converting Sub Ids': {route: 'add_converting_subids'},
+      }},
+      'Targets': {route: 'targets'},
+      'Affiliate Networks': {route: 'affiliatenetwork'},
+      'Traffic Sources': {route: 'trafficsource'},
+      'Security': {route: 'security'},
+      'Vertical Divider': {divider: true},
+      'Logout': {route: 'logout'}
+    } %}
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="{{ path('home') }}">{{ site_name }}</a>
+
+          {# .btn-navbar is used as the toggle for collapsed navbar content #}
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+
+          {# Everything in this div will be hidden at 940px and less (responsive) #}
+          <div class="nav-collapse">
+            <ul class="nav">
+              {% for name, item in nav_items %}
+                {% if item.children is defined %}
+                  {# The item has children #}
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      {{ name }}
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      {% for dropdown_name, dropdown_item in item.children %}
+                        {% if dropdown_item.route is defined %}
+                          <li>
+                            <a href="{{ path(dropdown_item.route) }}">{{ dropdown_name }}</a>
+                          </li>
+                        {% else %}
+                          <li class="divider"></li>
+                        {% endif %}
+                      {% endfor %}
+                    </ul>
+                  </li>
+                {% else %}
+                  {# No children #}
+                  {% if item.route is defined %}
+                    <li>
+                      <a href="{{ path(item.route) }}">{{ name }}</a>
+                    </li>
+                  {% else %}
+                    <li class="divider-vertical"></li>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </ul>
+            <div class="navbar-text pull-right" id="navbar-revenue" data-path="{{ path('stats_navbar_revenue') }}">
+              {% render "TrackerStatsBundle:Stats:navbarRevenue" %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+
+  <div class="container">
+    {# Display the flashes #}
+    {% for key, flash in app.session.getFlashes() %}
+      <div class="alert alert-{{ key }} fade in">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        {{ flash|raw }}
+      </div>
+    {% endfor %}
+
+    {% block content %}{% endblock %}
+  </div>
+{% endblock %}

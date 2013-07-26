@@ -1,0 +1,6 @@
+home:
+    pattern: /
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: campaign
+        permanent: true # this for 301

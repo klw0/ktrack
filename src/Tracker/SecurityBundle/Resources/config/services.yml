@@ -1,0 +1,18 @@
+parameters:
+    login_listener.class: Tracker\SecurityBundle\Listener\LoginListener
+    blacklist_voter.class: Tracker\SecurityBundle\Authorization\Voter\IpVoter
+
+services:
+    login_listener:
+        class: %login_listener.class%
+        arguments: [@doctrine]
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login, method: onLoginSuccess }
+            - { name: kernel.event_listener, event: security.login_failure, method: onLoginFailure }
+
+    blacklist_voter:
+        class: %blacklist_voter.class%
+        arguments: [@service_container]
+        public: false
+        tags:
+            - { name: security.voter }

@@ -1,0 +1,132 @@
+{% set has_landing_page = stats[0].landingPageName is defined %}
+{% set has_offer = stats[0].offerName is defined %}
+{% set extra_data_count = 5 %}
+
+{% macro suggested_bid(conversion_rate, avg_conversion_revenue, roi) %}
+  {{ ((conversion_rate * avg_conversion_revenue) / (1 + roi))|money(4) }} 
+{% endmacro %}
+
+{% macro suggested_bid_popover_content(conversion_rate, avg_conversion_revenue) %}
+  <div>25% ROI: &nbsp;{{ _self.suggested_bid(conversion_rate, avg_conversion_revenue, 0.25) }}</div>
+  <div>50% ROI: &nbsp;{{ _self.suggested_bid(conversion_rate, avg_conversion_revenue, 0.50) }}</div>
+  <div>75% ROI: &nbsp;{{ _self.suggested_bid(conversion_rate, avg_conversion_revenue, 0.75) }}</div>
+  <div>100% ROI: {{ _self.suggested_bid(conversion_rate, avg_conversion_revenue, 1.00) }}</div>
+  <div>200% ROI: {{ _self.suggested_bid(conversion_rate, avg_conversion_revenue, 2.00) }}</div>
+{% endmacro %}
+
+<h3>Target Stats</h3>
+
+<table class="table table-bordered table-striped" id="target-stats">
+  <thead>
+    <tr>
+      <th>Target</th>
+      <th>Target Status</th>
+
+      {% if has_landing_page %}
+        <th>LP</th>
+      {% endif %}
+
+      {% if has_offer %}
+        <th>Offer</th>
+      {% endif %}
+
+      {% for i in 1..extra_data_count %}
+        {% if attribute(stats[0], "extraData#{i}") is defined %}
+          <th>D{{ i }}</th>
+        {% endif %}
+      {% endfor %}
+
+      <th>Views</th>
+      <th>Clicks</th>
+      <th>CTR</th>
+      <th>Convs</th>
+      <th>CR</th>
+      <th>Revenue</th>
+      <th>Cost</th>
+      <th>Avg. CPV</th>
+      <th>P/L</th>
+      <th>EPC</th>
+      <th>
+        <span rel="popover" data-placement="left" data-original-title="Suggested Bid" data-content="Suggested bid based on 100% ROI.  Hover each suggested bid for more details.">Sug. Bid</span>
+      </th>
+      <th>ROI</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in stats %}
+      <tr>
+        {# Target #}
+        <td class="target-name">{{ row.targetName }}</td>
+
+        {# Target Status #}
+        <td>
+          {% if row.isTargetActive %}
+            <span class="label label-success">Active</span>
+          {% else %}
+            <span class="label label-important">Paused</span>
+          {% endif %}
+        </td>
+
+        {# LP #}
+        {% if has_landing_page %}
+          <td>{{ row.landingPageName }}</td>
+        {% endif %}
+
+        {# Offer #}
+        {% if has_offer %}
+          <td>{{ row.offerName }}</td>
+        {% endif %}
+
+        {# Extra Data Fields #}
+        {% for i in 1..extra_data_count %}
+          {% if attribute(stats[0], "extraData#{i}") is defined %}
+            <td>{{ attribute(row, "extraData#{i}") }}</td>
+          {% endif %}
+        {% endfor %}
+
+        {# Views #}
+        <td>{{ row.views }}</td>
+
+        {# Clicks #}
+        <td>{{ row.clicks }}</td>
+
+        {# CTR #}
+        <td>{{ (row.clicks / row.views)|percent }}</td>
+
+        {# Conversions #}
+        <td>{{ row.conversions }}</td>
+
+        {# CR #}
+        {% set conversion_rate = row.conversions / row.views %}
+        <td>{{ conversion_rate|percent }}</td>
+
+        {# Revenue #}
+        <td>{{ row.revenue|default(0)|money }}</td>
+
+        {# Cost #}
+        <td>{{ row.cost|money(4) }}</td>
+
+        {# Avg. CPV #}
+        <td>{{ row.averageCostPerView|money(4) }}</td>
+
+        {# Profit #}
+        {% set profit = row.revenue - row.cost %}
+        <td>{{ profit|money }}</td>
+
+        {# EPC #}
+        <td>{{ (row.clicks != 0 ? row.revenue / row.clicks : 0)|money }}</td>
+
+        {# suggested Bid #}
+        {% set avg_conversion_revenue = (row.conversions != 0 ? row.revenue / row.conversions : 0) %}
+        <td>
+          <span rel="popover" data-placement="left" data-original-title="Suggested Bids" data-content="{{ _self.suggested_bid_popover_content(conversion_rate, avg_conversion_revenue) }}">
+            {{ _self.suggested_bid(conversion_rate, avg_conversion_revenue, 1.00) }}
+          </span>
+        </td>
+
+        {# ROI #}
+        <td>{{ (row.cost != 0 ? profit / row.cost : 0)|percent }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

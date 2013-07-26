@@ -1,0 +1,4 @@
+# Import routes from a controller directory
+security:
+    resource: "@TrackerSecurityBundle/Controller"
+    type:     annotation

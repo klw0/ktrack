@@ -1,0 +1,36 @@
+{% extends 'TrackerCommonBundle::layout.html.twig' %}
+
+{% block javascripts %}
+  {{ parent() }}
+
+  <script src="{{ asset('bundles/trackerstats/js/daypart.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+  <form novalidate class="form-horizontal" id="filter-form" action="{{ path('stats_daypart_update') }}" method="post" {{ form_enctype(filter_form) }}>
+    {{ form_errors(filter_form) }}
+    {{ form_widget(filter_form.campaigns) }}
+
+    {# Extreme laziness #}
+    <span class="spacer"></span>
+
+    {{ form_widget(filter_form.startDate, {'attr': {'class': 'input-small'}}) }}
+    <input class="span1 disabled" type="text" placeholder="12:00 AM" disabled>
+    to
+    {{ form_widget(filter_form.endDate, {'attr': {'class': 'input-small'}}) }}
+    <input class="span1 disabled" type="text" placeholder="11:59 PM" disabled>
+
+    <button id="reload-button" class="btn btn-success pull-right">
+      <span class="icon-refresh icon-white"></span>
+      Reload
+    </button>
+
+    {{ form_rest(filter_form) }}
+  </form>
+
+  <hr />
+
+  <div id="stats">
+    {% include 'TrackerStatsBundle:Stats:daypartStats.html.twig' with {'stats': hourly_stats} %}
+  </div>
+{% endblock %}

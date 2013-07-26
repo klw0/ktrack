@@ -1,0 +1,98 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th id="view-column"></th>
+      <th id="action-column"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for campaign in campaigns %}
+
+      {% set reset_modal_id = 'reset-modal-campaign-' ~ campaign.id %}
+      {% set delete_modal_id = 'delete-modal-campaign-' ~ campaign.id %}
+
+      <tr>
+        <td>{{ campaign.name }}</td>
+        <td>
+          <a class="btn btn-small btn-info" href="{{ path('stats_campaign', { 'campaignId': campaign.id }) }}">
+            <span class="icon-signal icon-white"></span>
+            Stats
+          </a>
+
+          <a class="btn btn-small" href="{{ path('targets_campaign', { 'campaignId': campaign.id }) }}">
+            <span class="icon-screenshot"></span>
+            Targets
+          </a>
+        </td>
+        <td>
+          <div class="btn-group">
+            <a class="btn btn-small" href="{{ path('campaign_edit', { 'id': campaign.id }) }}">
+              <span class="icon-pencil"></span>
+              Edit
+            </a>
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="{{ path('campaign_clone', {'id': campaign.id}) }}">
+                  <span class="icon-plus-sign"></span>
+                  Clone
+                </a>
+              </li>
+              <li>
+                <a href="{{ path('campaign_active', {'id': campaign.id}) }}">
+                  <span class="icon-off"></span>
+                  {{ campaign.isActive ? 'Deactivate' : 'Activate' }}
+                </a>
+              </li>
+              <li>
+                <a data-toggle="modal" href="#{{ delete_modal_id }}">
+                  <span class="icon-trash"></span>
+                  Delete
+                </a>
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a data-toggle="modal" href="#{{ reset_modal_id }}">
+                  <span class="icon-remove-circle"></span>
+                  Reset stats
+                </a>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+
+      <div id="{{ delete_modal_id }}" class="modal fade hide">
+        <div class="modal-header">
+          <a href="#" class="close" data-dismiss="modal">×</a>
+          <h3>Are you sure?</h3>
+        </div>
+        <div class="modal-body">
+          <p>This will delete "{{ campaign }}", FOREVER!</p>
+        </div>
+        <div class="modal-footer">
+          <a href="{{ path('campaign_delete', {'id': campaign.id}) }}" class="btn btn-primary">Do It</a>
+          <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+        </div>
+      </div>
+
+      <div id="{{ reset_modal_id }}" class="modal fade hide">
+        <div class="modal-header">
+          <a href="#" class="close" data-dismiss="modal">×</a>
+          <h3>Are you sure?</h3>
+        </div>
+        <div class="modal-body">
+          <p>This will reset the stats for "{{ campaign }}".</p>
+        </div>
+        <div class="modal-footer">
+          <a href="{{ path('campaign_reset_stats', {'id': campaign.id}) }}" class="btn btn-primary">Do It</a>
+          <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+        </div>
+      </div>
+
+    {% endfor %}
+  </tbody>
+</table>

@@ -1,0 +1,44 @@
+@import '../../trackercommon/less/common.less';
+
+span.spacer {
+  margin: 0px 7px;
+}
+
+#reload-button {
+  position: fixed;
+  top: 50px;
+  right: 50px;
+  .box-shadow;
+}
+
+#options-group {
+  display: inline;
+  position: relative;
+}
+
+#options {
+  // Make me pretty like a bootstrap dropdown menu
+  .dropdown-menu;
+  .border-radius(5px);
+  top: 160%;
+  min-width: 250px;
+  max-width: 400px;
+  padding: 15px;
+
+  // Form related
+  @label-width: 60px;
+  @offset: 20px;
+
+  .control-group > label {
+    width: @label-width;
+  }
+
+  .controls {
+    margin-left: @label-width + @offset;
+  }
+}
+
+.target-name {
+  max-width: 320px;
+  word-wrap: break-word;
+}

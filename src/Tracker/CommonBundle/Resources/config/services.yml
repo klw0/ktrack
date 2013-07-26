@@ -1,0 +1,15 @@
+parameters:
+    tracker_common.type.string_array.class: Tracker\CommonBundle\Form\StringArrayType
+    tracker_common.twig.extension.class: Tracker\CommonBundle\Twig\Extension\TrackerExtension
+
+services:
+    tracker_common.type.string_array:
+        class: %tracker_common.type.string_array.class%
+        tags:
+            - { name: form.type, alias: string_array }
+
+    tracker_common.twig.extension:
+        class: %tracker_common.twig.extension.class%
+        tags:
+            - { name: twig.extension }
+

@@ -1,0 +1,29 @@
+{% extends 'TrackerCommonBundle::layout.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+
+  <link href="{{ asset('bundles/trackercampaign/less/form.less') }}" rel="stylesheet/less" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+
+  <script src="{{ asset('bundles/trackercampaign/js/campaignform.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="span8 offset2">
+      <form novalidate class="form-horizontal well" action="{{ path('campaign_create') }}" method="post" {{ form_enctype(form) }}>
+        {% include 'TrackerCampaignBundle:Campaign:form.html.twig' with { 'form': form, 'campaign': campaign } %}
+
+        <div class="form-actions">
+          <a class="btn" href="{{ path('campaign') }}">Cancel</a>
+          <button class="btn btn-primary" type="submit">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+

@@ -1,0 +1,36 @@
+TrackerCommonBundle:
+    resource: "@TrackerCommonBundle/Resources/config/routing.yml"
+    prefix:   /
+
+TrackerStatsBundle:
+    resource: "@TrackerStatsBundle/Resources/config/routing.yml"
+    prefix:   /
+
+TrackerTargetBundle:
+    resource: "@TrackerTargetBundle/Resources/config/routing.yml"
+    prefix:   /
+
+TrackerTrackingBundle:
+    resource: "@TrackerTrackingBundle/Resources/config/routing.yml"
+    prefix:   /
+
+TrackerCampaignBundle:
+    resource: "@TrackerCampaignBundle/Resources/config/routing.yml"
+    prefix:   /
+
+TrackerTrafficSourceBundle:
+    resource: "@TrackerTrafficSourceBundle/Resources/config/routing.yml"
+    prefix:   /
+
+TrackerAffiliateNetworkBundle:
+    resource: "@TrackerAffiliateNetworkBundle/Resources/config/routing.yml"
+    prefix:   /
+
+TrackerSecurityBundle:
+    resource: "@TrackerSecurityBundle/Resources/config/routing.yml"
+    prefix:   /
+
+# Internal routing configuration to handle ESI
+#_internal:
+#   resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
+#   prefix:   /_internal
